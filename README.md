@@ -4,7 +4,7 @@ SWChen---A program for RNA interaction analysis
 The Smith-Waterman algorithm is a local sequence alignment algorithm to identify similar regions between two nucleotide or protein sequences. We acquire the interactional region between miRNA and lncRNA by Smith-Waterman algorithm and the principle of complementary base pairing. By this method, the binding probability of RNAs can be predicted to screen interesting lncRNAs, miRNAs or circRNAs.
 
 # Download:
-https://github.com/YLCHEN1992/SWChen
+https://github.com/YLCHEN1992/SWChen/blob/main/SWChen%202021.R
 
 # Specification: 
 Execute code：SWChen(target sequence.csv,data sequence.csv,default value=rv(RNA interaction score)【other including s\smi\mis\hair】)
