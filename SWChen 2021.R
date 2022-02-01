@@ -203,7 +203,7 @@ write.csv(bst,NAME,row.names=FALSE)
 cat("阁下",short2,RNA,"已预测完成,文件保存在",as.character(getwd()),"目录下\n")
 best0=read.csv(NAME)
 setwd(address)
-if(m==1){SWChenM(x=best0,t=t,Larg=Larg,Classer=Classer,passname=short2,RNA=RNA,message=message)
+if(m==1){SWChenM(x=best0,t=t,Larg=Larg,Classer=Classer,passname=short2,RNA=RNA,message=message,norder=norder)
 }else{cat("选择命令m=1不画图")}}
 
 # affiliate function for simple compute 1 need binding [chen_smis] function
