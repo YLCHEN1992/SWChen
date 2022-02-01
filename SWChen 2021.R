@@ -2,11 +2,11 @@
 # Version 2021.6.13
 # including Simith matrix<chen_smis(seq1,seq2)>; <SWChen(x,y,m,t,large,message)>;
 # including Volcano trace<Sefmap(chen_smis)>; Scatter plot martrix <MatChen(x,y,noise,...)>
-# ºËĞÄº¯Êı£ºÖ´ĞĞ´úÂëSWChen(Ä¿±êĞòÁĞ.csv,Êı¾İ¿âĞòÁĞ.csv,Ä¬ÈÏÖµ=RNA»¥×÷ÆÀ·Örv¡¾»¹º¬ÓĞs\smi\mis\hairËÄ¸ö²ÎÊı¡¿)
+# æ ¸å¿ƒå‡½æ•°ï¼šæ‰§è¡Œä»£ç SWChen(ç›®æ ‡åºåˆ—.csv,æ•°æ®åº“åºåˆ—.csv,é»˜è®¤å€¼=RNAäº’ä½œè¯„åˆ†rvã€è¿˜å«æœ‰s\smi\mis\hairå››ä¸ªå‚æ•°ã€‘)
 
 library(ggplot2) # need package and core calculation theroy is not necessary
 
-# LncRNA miRNA mRNA°ĞÏòÔ¤²â¼°RNAÇøÓò¶ş¼¶½á¹¹³ÌĞò£¬Ìá¹©rv\s\smi\mis\hairÎåÖÖÔ¤²âĞÎÊ½
+# LncRNA miRNA mRNAé¶å‘é¢„æµ‹åŠRNAåŒºåŸŸäºŒçº§ç»“æ„ç¨‹åºï¼Œæä¾›rv\s\smi\mis\hairäº”ç§é¢„æµ‹å½¢å¼
 # default <rv>: interaction calculate
 # <s>: similar align
 # <smi>: seed region of miRNA sequence to match sequence database
@@ -94,16 +94,16 @@ misscore=5*ogap+2*egap+miss*5
 score=(n+1)*10-misscore
 if(misscore>=50|n+1>=nrow(F)){break}} # Back count and score again
 srg="";scg=""
-srg=paste("µÚ",as.character(rg),"Î»",sep="",collapse=",")
-scg=paste("µÚ",as.character(cg),"Î»",sep="",collapse=",")
+srg=paste("ç¬¬",as.character(rg),"ä½",sep="",collapse=",")
+scg=paste("ç¬¬",as.character(cg),"ä½",sep="",collapse=",")
 best=matrix();best=matrix(c(score,num,srg,scg),ncol=4)
 best}
 
 # core map function
-SWChenM=function(x,t=1,Classer="single",passname="SWChenM",RNA="RNA",Larg=300,message="Drafted by Chen"){
+SWChenM=function(x,t=1,Classer="single",passname="SWChenM",RNA="RNA",Larg=300,message="Drafted by Chen",norder=5){
 address=getwd()
 best=x
-cat("¿ªÊ¼»æÖÆ×÷ÓÃÎ»µãÍ¼... ...\n")
+cat("å¼€å§‹ç»˜åˆ¶ä½œç”¨ä½ç‚¹å›¾... ...\n")
 # table making
 Tmar=data.frame()
 Tmar=data.frame(name=as.character(best[,1]),HighestScore=best$HighestScore,SCG=best$SCG_Rverse_longer)
@@ -122,36 +122,36 @@ mapM=data.frame(name=Tmar$name[mj],xp=as.integer(xsp),Yscore=as.integer(Tmar$Hig
 data_mapM=rbind(data_mapM,mapM)}
 #made table
 data_mapM[,2]=as.integer(data_mapM[,2])
-cat("»æÖÆÊı¾İ´¦ÀíÍê±Ï\n")
+cat("ç»˜åˆ¶æ•°æ®å¤„ç†å®Œæ¯•\n")
 graph=ggplot()+
-geom_point(aes(x=data_mapM$xp,y=data_mapM$Yscore,color=data_mapM$Yscore,shape="¡ï"))+
+geom_point(aes(x=data_mapM$xp,y=data_mapM$Yscore,color=data_mapM$Yscore),shape="â˜…",size=5)+
 scale_colour_gradient(low = "black",high = "red")
 if(t==1){
-mns=which(data_mapM[,3]==max(data_mapM[,3]))
+mns=order(-data_mapM[,3])[1:norder]
 mtext=""; mx=0; my=0
 mtext=as.character(data_mapM[mns,1])
 mx=data_mapM[mns,2]
 my=data_mapM[mns,3]
-graph=graph+geom_text(aes(x=mx,y=my),label=paste("¨L",substr(mtext[loop],1,15)),hjust=0,vjust=0,check_overlap = T)
-}else{cat("²»±ê×¢×î´óĞÅÏ¢\n")}
+graph=graph+geom_text(aes(x=mx,y=my),label=paste("â†™",substr(mtext,1,15)),hjust=0,vjust=0,check_overlap = T)
+}else{cat("ä¸æ ‡æ³¨æœ€å¤§ä¿¡æ¯\n")}
 egraph=graph+labs(title=paste("RNA INTERACTION"," [",Classer,"]     ",message,sep=""), 
-x="Seqence Length", y="Interaction Score")+
+x="Seqence Length", y="Interaction Score")+guides(color=guide_colorbar('Score'))+
 theme(plot.title = element_text(hjust = 0.5))
-cat("»æÖÆÍê±Ï\n")
-if (file.exists("./GraphRNAi")==TRUE){cat("¸óÏÂÄ¿±êÎÄ¼ş¼Ğ GraphRNAi ÒÑ´æÔÚ\n")}else{
+cat("ç»˜åˆ¶å®Œæ¯•\n")
+if (file.exists("./GraphRNAi")==TRUE){cat("é˜ä¸‹ç›®æ ‡æ–‡ä»¶å¤¹ GraphRNAi å·²å­˜åœ¨\n")}else{
 dir.create("./GraphRNAi", recursive=TRUE)
-cat("Ä¿±êÎÄ¼ş¼Ğ GraphRNAi ÒÑÎª¸óÏÂ´´½¨\n")}
+cat("ç›®æ ‡æ–‡ä»¶å¤¹ GraphRNAi å·²ä¸ºé˜ä¸‹åˆ›å»º\n")}
 setwd("./GraphRNAi")
-gNAME=paste("¸óÏÂ",passname,RNA,"ÒÑ»æÖÆÍê³É",gsub(":","_",Sys.time()),".png")
+gNAME=paste("é˜ä¸‹",passname,RNA,"å·²ç»˜åˆ¶å®Œæˆ",gsub(":","_",Sys.time()),".png")
 ggsave(filename=gNAME,egraph,dpi=Larg,width=24,height=8)
-cat("¸óÏÂ",passname,RNA,"ÒÑ»æÖÆÍê³É,ÎÄ¼ş±£´æÔÚ",as.character(getwd()),"Ä¿Â¼ÏÂ\n")
+cat("é˜ä¸‹",passname,RNA,"å·²ç»˜åˆ¶å®Œæˆ,æ–‡ä»¶ä¿å­˜åœ¨",as.character(getwd()),"ç›®å½•ä¸‹\n")
 setwd(address)
 egraph}
 
 # Core function
-SWChen=function(x,y,Classer="rv",m=1,t=0,Larg=600,message="¡ïSWChen¡ï"){
+SWChen=function(x,y,Classer="rv",m=1,t=0,Larg=600,message="â˜…SWChenâ˜…",norder=5){
 address=getwd()
-cat("Welcome to SWChen RNA interaction predictor\nCurrent Version£º 2021.6.13 Version\n")
+cat("Welcome to SWChen RNA interaction predictor\nCurrent Versionï¼š 2021.6.13 Version\n")
 cat("Copyright reserved\nupdate:\nhttp://ylchen-swchen.lofter.com/ \nhttps://github.com/YLCHEN1992\nStart working\n")
 TYPE=Classer
 cat(paste("You selected ",Classer,"type\n",sep="")) 
@@ -161,50 +161,50 @@ RNA=""; X12=""; Y02=c()
 if(TYPE=="s"){
 X12<-as.character(X[1,2])
 Y02<-as.character(Y[,2])
-RNA="RNAĞòÁĞ¾Ö²¿ÏàËÆ·ÖÎö"
+RNA="RNAåºåˆ—å±€éƒ¨ç›¸ä¼¼åˆ†æ"
 }else if(TYPE=="smi"){
 X12<-chen_sc(substr(as.character(X[1,2]),2,8))
 Y02<-as.character(Y[,2])
-RNA="Ä¿±êmiRNA¶ÌÖÖ×Ó"
+RNA="ç›®æ ‡miRNAçŸ­ç§å­"
 }else if(TYPE=="mis"){
 X12<-as.character(X[1,2])
 Y02<-chen_sc(substring(as.character(Y[,2]),2,8))
-RNA="miRNAÊı¾İ¿â¶ÌÖÖ×Ó"
+RNA="miRNAæ•°æ®åº“çŸ­ç§å­"
 }else if(TYPE=="hair"){
 X12<-as.character(X[1,2])
 Y02<-chen_sc(as.character(Y[,2]))
-RNA="ÄÚ²¿·¢¼Ğ½á¹¹Ô¤²â"
+RNA="å†…éƒ¨å‘å¤¹ç»“æ„é¢„æµ‹"
 }else{
 X12<-chen_sc(as.character(X[1,2]))
 Y02<-as.character(Y[,2])
-RNA=" RNAÏà»¥×÷ÓÃÆÀ·Ö "}
+RNA=" RNAç›¸äº’ä½œç”¨è¯„åˆ† "}
 N=nrow(Y)
 Mg=matrix(0,nrow=N,ncol=4)
 for(i in 1:N){
 T=Sys.time()
 Mg[i,]=chen_score(chen_smis(as.character(X12),Y02[i]))
-cat("ĞòÁĞ¡¾",as.character(Y[i,1]),"¡¿ÒÑÍê³É\n",
-as.character(round(as.numeric((i/N)*100),3)),"% ÔËËãÍê³É£¡\n")
+cat("åºåˆ—ã€",as.character(Y[i,1]),"ã€‘å·²å®Œæˆ\n",
+as.character(round(as.numeric((i/N)*100),3)),"% è¿ç®—å®Œæˆï¼\n")
 TP=Sys.time()
 DT=as.numeric(TP-T)
-cat("%\n µ±Ç°ËÙ¶ÈÎª",as.character(round(as.numeric(DT),3)),"Ãë/¸ö\n",
-"´óÔ¼»¹ĞèÒª",as.character(round(as.numeric(DT),3)*(N-i)),"Ãë\n")}
+cat("%\n å½“å‰é€Ÿåº¦ä¸º",as.character(round(as.numeric(DT),3)),"ç§’/ä¸ª\n",
+"å¤§çº¦è¿˜éœ€è¦",as.character(round(as.numeric(DT),3)*(N-i)),"ç§’\n")}
 bst=data.frame()
 bst=data.frame(Mg)
 colnames(bst)=c("HighestScore","NumberBinding","SRG","SCG_Rverse_longer")
 bst=cbind(Y,bst)
 short2=chartr('.',"_",as.character(X[1,1]))
-NAME=paste("¸óÏÂ",short2,RNA,"ÒÑÔ¤²âÍê³É",gsub(":","_",Sys.time()),".csv")
-if (file.exists("./RNAi")==TRUE){cat("¸óÏÂÄ¿±êÎÄ¼ş¼Ğ RNAi ÒÑ´æÔÚ\n")}else{
+NAME=paste("é˜ä¸‹",short2,RNA,"å·²é¢„æµ‹å®Œæˆ",gsub(":","_",Sys.time()),".csv")
+if (file.exists("./RNAi")==TRUE){cat("é˜ä¸‹ç›®æ ‡æ–‡ä»¶å¤¹ RNAi å·²å­˜åœ¨\n")}else{
 dir.create("./RNAi", recursive=TRUE)
-cat("Ä¿±êÎÄ¼ş¼Ğ RNAi ÒÑÎª¸óÏÂ´´½¨\n")}
+cat("ç›®æ ‡æ–‡ä»¶å¤¹ RNAi å·²ä¸ºé˜ä¸‹åˆ›å»º\n")}
 setwd("./RNAi")
 write.csv(bst,NAME,row.names=FALSE)
-cat("¸óÏÂ",short2,RNA,"ÒÑÔ¤²âÍê³É,ÎÄ¼ş±£´æÔÚ",as.character(getwd()),"Ä¿Â¼ÏÂ\n")
+cat("é˜ä¸‹",short2,RNA,"å·²é¢„æµ‹å®Œæˆ,æ–‡ä»¶ä¿å­˜åœ¨",as.character(getwd()),"ç›®å½•ä¸‹\n")
 best0=read.csv(NAME)
 setwd(address)
 if(m==1){SWChenM(x=best0,t=t,Larg=Larg,Classer=Classer,passname=short2,RNA=RNA,message=message)
-}else{cat("Ñ¡ÔñÃüÁîm=1²»»­Í¼")}}
+}else{cat("é€‰æ‹©å‘½ä»¤m=1ä¸ç”»å›¾")}}
 
 # affiliate function for simple compute 1 need binding [chen_smis] function
 Sefmap=function(F,name="Interaction Region",message="Interaction Region",Larg=600){
@@ -216,13 +216,13 @@ graphmap=ggplot(map)+
 geom_point(aes(x=Sites,y=Score,color=Score))+
 scale_colour_gradient(low = "green3",high = "black")+
 labs(title=message)+theme(plot.title = element_text(hjust = 0.5))
-if (file.exists("./GraphRNAi")==TRUE){cat("¸óÏÂÄ¿±êÎÄ¼ş¼Ğ GraphRNAi ÒÑ´æÔÚ\n")}else{
+if (file.exists("./GraphRNAi")==TRUE){cat("é˜ä¸‹ç›®æ ‡æ–‡ä»¶å¤¹ GraphRNAi å·²å­˜åœ¨\n")}else{
 dir.create("./GraphRNAi", recursive=TRUE)
-cat("Ä¿±êÎÄ¼ş¼Ğ GraphRNAi ÒÑÎª¸óÏÂ´´½¨\n")}
+cat("ç›®æ ‡æ–‡ä»¶å¤¹ GraphRNAi å·²ä¸ºé˜ä¸‹åˆ›å»º\n")}
 setwd("./GraphRNAi")
-gNAME=paste("¸óÏÂ",name,"ÒÑ»æÖÆÍê³É",gsub(":","_",Sys.time()),".png")
+gNAME=paste("é˜ä¸‹",name,"å·²ç»˜åˆ¶å®Œæˆ",gsub(":","_",Sys.time()),".png")
 ggsave(filename=gNAME,graphmap,dpi=Larg,width=24,height=4)
-cat("¸óÏÂ",name,"ÒÑ»æÖÆÍê³É,ÎÄ¼ş±£´æÔÚ",as.character(getwd()),"Ä¿Â¼ÏÂ\n")
+cat("é˜ä¸‹",name,"å·²ç»˜åˆ¶å®Œæˆ,æ–‡ä»¶ä¿å­˜åœ¨",as.character(getwd()),"ç›®å½•ä¸‹\n")
 setwd(address)
 graphmap}
 
@@ -248,13 +248,13 @@ map=data.frame(A=X,B=Y)
 graphmap=ggplot(map)+
 geom_point(aes(x=A,y=B), shape=17)+
 labs(title=message)+theme(plot.title = element_text(hjust = 0.5))
-if (file.exists("./GraphRNAi")==TRUE){cat("¸óÏÂÄ¿±êÎÄ¼ş¼Ğ GraphRNAi ÒÑ´æÔÚ\n")}else{
+if (file.exists("./GraphRNAi")==TRUE){cat("é˜ä¸‹ç›®æ ‡æ–‡ä»¶å¤¹ GraphRNAi å·²å­˜åœ¨\n")}else{
 dir.create("./GraphRNAi", recursive=TRUE)
-cat("Ä¿±êÎÄ¼ş¼Ğ GraphRNAi ÒÑÎª¸óÏÂ´´½¨\n")}
+cat("ç›®æ ‡æ–‡ä»¶å¤¹ GraphRNAi å·²ä¸ºé˜ä¸‹åˆ›å»º\n")}
 setwd("./GraphRNAi")
-gNAME=paste("¸óÏÂ",name,"ÒÑ»æÖÆÍê³É",gsub(":","_",Sys.time()),".png")
+gNAME=paste("é˜ä¸‹",name,"å·²ç»˜åˆ¶å®Œæˆ",gsub(":","_",Sys.time()),".png")
 ggsave(filename=gNAME,graphmap,dpi=Larg,width=24,height=4)
-cat("¸óÏÂ",name,"ÒÑ»æÖÆÍê³É,ÎÄ¼ş±£´æÔÚ",as.character(getwd()),"Ä¿Â¼ÏÂ\n")
+cat("é˜ä¸‹",name,"å·²ç»˜åˆ¶å®Œæˆ,æ–‡ä»¶ä¿å­˜åœ¨",as.character(getwd()),"ç›®å½•ä¸‹\n")
 setwd(address)
 graphmap}
 
